@@ -1,0 +1,1 @@
+echo -e "venv/\n.venv/\nenv/\n__pycache__/\n*.pyc\n.ipynb_checkpoints/\n*.csv\n*.pkl" > .gitignore
