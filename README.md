@@ -1,83 +1,115 @@
 # Email Spam Detection System
 
-![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge)
-![Scikit-Learn](https://img.shields.io/badge/Scikit_Learn-TF--IDF_%26_Na%C3%AFve_Bayes-F7931E?style=for-the-badge)
-![Pandas](https://img.shields.io/badge/Pandas-Data_Processing-150458?style=for-the-badge)
-![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-Web_API-000000?style=for-the-badge&logo=flask&logoColor=white)
+![NLP](https://img.shields.io/badge/NLP-CountVectorizer_%7C_Machine_Learning-yellow?style=for-the-badge)
+![Scikit-Learn](https://img.shields.io/badge/Scikit_Learn-Classification-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
 
 <p align="center">
-  <b>An end-to-end Natural Language Processing (NLP) binary text classification pipeline designed to ingest raw email content, execute TF-IDF vectorization, mitigate class imbalance, evaluate classification metrics, and deliver real-time spam predictions.</b>
-</p>
-
----
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Algorithm-TF--IDF_Vectorization-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Model-Multinomial_NB_%2F_Logistic_Regression-green?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Handling-Class_Weight_Balanced-orange?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Metrics-Precision_%26_Recall-red?style=for-the-badge" />
+  <b>An end-to-end Natural Language Processing (NLP) machine learning pipeline and web application designed to clean, vectorize, train, evaluate, and classify incoming emails as spam or legitimate (ham) messages.</b>
 </p>
 
 ---
 
 ## Overview
 
-**Email Spam Detection System** is an NLP-driven binary classification pipeline built to analyze unstructured email text and automatically categorize messages into **Spam** or **Ham (Legitimate)**.
+The **Email Spam Detection System** is an automated text classification engine built to ingest raw email datasets, perform data cleaning and tokenization, extract count-based features, and train predictive machine learning models to filter out unwanted spam messages.
 
-Instead of relying on simple keyword blacklists, the system establishes a robust machine learning workflow incorporating:
+The project features a modular backend structure located inside `src/`, containing dedicated subpackages for data processing, feature engineering, model training, evaluation, inference, quarantine management, and API routing:
 
-* **Text Preprocessing & Normalization:** Lowercasing, noise removal, tokenization, stop-word filtering, and stem/lemma normalization.
-* **Feature Extraction:** Sublinear TF-IDF N-gram Vectorization to transform raw text into sparse numerical matrices.
-* **Class Imbalance Mitigation:** Optimized probability thresholds and class-weight balancing to reduce false positives.
-* **Evaluation & Diagnostics:** Performance evaluation prioritizing **Precision** to ensure legitimate emails are never misclassified as spam.
-
-The pipeline transforms raw textual bodies into high-dimensional numerical feature vectors using TF-IDF and outputs instant spam likelihood predictions via modular execution scripts.
+* **Data Management (`src/data/`, `data/`):** Handles raw dataset ingestion (`email_spam_dataset.csv`), text preprocessing, and processed data persistence (`cleaned_emails.csv`).
+* **Feature Extraction (`src/features/`):** Transforms clean text messages into numeric feature vectors using Count Vectorization (`vectorizer.py`).
+* **Model Training & Evaluation (`src/models/`):** Orchestrates model building (`build_model.py`), training (`train.py`), performance evaluation (`evaluate.py`), and real-time prediction (`predict.py`).
+* **Quarantine & API Routing (`src/quarantine/`, `src/api/`):** Manages flagged messages (`store.py`) and serves predictions via Flask web endpoints (`app.py`).
 
 ---
 
-### Application Features
-
-* **Modular End-to-End Architecture:** Clean separation across data loading, preprocessing, feature extraction, model training, evaluation, and inference modules.
-* **High-Precision Filtering:** Fine-tuned to maximize Precision, minimizing the risk of legitimate emails (Ham) being marked as Spam.
-* **Preserved Context Signals:** Text cleaning routines optimized to preserve structural flags (e.g., currency symbols, urgent phrasing, specific punctuation).
-* **Transparent Evaluation Matrix:** Reports precision, recall, F1-score, ROC-AUC curves, and structured confusion matrices.
-* **Production-Ready Artifacts:** Automatically serializes trained models and vectorizer instances (`.pkl`) for instant real-time inference workflows.
-
----
-
-## Project Objective
-
-The primary objective is to build a scalable, high-precision spam filtering pipeline that can:
-
-* Clean and structure high-dimensional unstructured email text from raw CSV datasets.
-* Resolve data quality issues such as empty strings, duplicate messages, and uninformative noise words.
-* Transform message text into sparse numerical representations using `TfidfVectorizer`.
-* Handle real-world class imbalance where legitimate emails outnumber spam messages.
-* Benchmark model performance using standard metrics (Precision, Recall, F1-Score, Confusion Matrix).
-* Package model artifacts cleanly for version control and modular deployment.
-
----
-
-## Problem Statement
-
-Spam emails flood user inboxes daily, presenting security risks such as phishing attacks and malware distribution. Simple rule-based filters fail to adapt to modern adversarial spam phrasing.
-
-Standard machine learning baselines often suffer from:
-
-* **High False Positive Rates:** Marking crucial legitimate emails as spam due to aggressive keyword matching.
-* **Overfitting:** Failing to generalize when spam senders intentionally misspell words or vary phrasing.
-* **Lack of Modularity:** Monolithic script structures that lack entry points for automated training or API integration.
-
-### Proposed Solution
-
-This project introduces a robust NLP classification pipeline executing:
-
-$$\text{Raw Email Text} \longrightarrow \text{Text Preprocessing} \longrightarrow \text{TF-IDF Matrix} \longrightarrow \text{ML Classification} \longrightarrow \text{Spam Prediction}$$
-
-For every message processed, the system produces:
+## Repository Structure
 
 ```text
-Cleaned Email Text
-Predicted Label (Spam / Ham)
-Prediction Confidence / Decision Probability
-Evaluation Metrics & Confusion Matrix Output
+Project-2 Email Spam Detection/
+├── data/
+│   ├── processed/
+│   │   └── cleaned_emails.csv     # Preprocessed email text dataset
+│   ├── raw/
+│   │   └── email_spam_dataset.csv # Original raw email dataset
+│   └── sample/                    # Sample test files
+├── models/
+│   ├── count_vectorizer.pkl       # Fitted Count Vectorizer binary
+│   └── spam_model.pkl             # Trained spam classification model binary
+├── notebooks/                     # Jupyter notebooks for EDA and prototyping
+├── src/
+│   ├── api/
+│   │   └── app.py                 # Flask API server implementation
+│   ├── data/                      # Data loading & cleaning pipeline
+│   ├── features/
+│   │   └── vectorizer.py          # Count Vectorizer feature extraction module
+│   ├── models/
+│   │   ├── build_model.py         # Classifier model architecture
+│   │   ├── evaluate.py            # Evaluation metrics calculation
+│   │   ├── predict.py             # Single & batch prediction logic
+│   │   └── train.py               # Model training script
+│   ├── quarantine/
+│   │   └── store.py               # Flagged/quarantined email management
+│   └── utils/                     # Utility helper functions
+├── .gitignore                     # Git exclusion rules
+├── Email_Spam_Detection_Guide.docx # Detailed project documentation guide
+├── main.py                        # Core application execution entry point
+├── README.md                      # Project documentation
+└── requirements.txt               # Python dependencies
+
+```
+
+---
+
+## System Architecture
+
+$$\text{Raw Email} \longrightarrow \text{Data Processing (`src/data/`)} \longrightarrow \text{Count Vectorization (`src/features/`)} \longrightarrow \text{Classification Model (`src/models/`)} \longrightarrow \text{Flask API (`src/api/app.py`)}$$
+
+1. **Ingestion & Cleaning:** Raw email messages are loaded and normalized.
+2. **Feature Vectorization:** Processed text is transformed into numerical token counts using `count_vectorizer.pkl`.
+3. **Classification:** The trained model (`spam_model.pkl`) evaluates the vector to classify the email as Spam or Ham.
+4. **API Serving:** Results are delivered via the Flask backend interface and managed through quarantine storage rules.
+
+---
+
+## Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone [https://github.com/Abdulla-B-Official/Email-Spam-Detection-System.git](https://github.com/Abdulla-B-Official/Email-Spam-Detection-System.git)
+cd "Project-2 Email Spam Detection"
+
+```
+
+### 2. Set Up Virtual Environment
+
+```bash
+python -m venv .venv
+# Activate on Windows PowerShell:
+.venv\Scripts\Activate.ps1
+# Activate on Linux/macOS:
+source .venv/bin/activate
+
+```
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+
+```
+
+### 4. Run the Application
+
+```bash
+python main.py
+
+```
+
+*(Or launch the API service directly via `python src/api/app.py`)*
+
+```
+
+```
