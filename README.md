@@ -1,3 +1,5 @@
+# Email Spam Detection System
+
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Scikit-Learn](https://img.shields.io/badge/Scikit_Learn-Machine_Learning-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
 ![NLP](https://img.shields.io/badge/NLP-Text_Classification-orange?style=for-the-badge)
