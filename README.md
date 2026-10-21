@@ -1,75 +1,95 @@
-# Email Spam Detection System
-
+```markdown
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-Web_API-000000?style=for-the-badge&logo=flask&logoColor=white)
-![NLP](https://img.shields.io/badge/NLP-CountVectorizer_%7C_Machine_Learning-yellow?style=for-the-badge)
-![Scikit-Learn](https://img.shields.io/badge/Scikit_Learn-Classification-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
+![Scikit-Learn](https://img.shields.io/badge/Scikit_Learn-Machine_Learning-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
+![NLP](https://img.shields.io/badge/NLP-Text_Classification-orange?style=for-the-badge)
+![FastAPI](https://img.shields.io/badge/FastAPI-Web_API-005571?style=for-the-badge&logo=fastapi&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Pytest](https://img.shields.io/badge/Pytest-Testing-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)
 
 <p align="center">
-  <b>An end-to-end Natural Language Processing (NLP) machine learning pipeline and web application designed to clean, vectorize, train, evaluate, and classify incoming emails as spam or legitimate (ham) messages.</b>
+  <b>A production-style machine learning web application designed to classify messages as spam or legitimate (ham) using natural language processing text vectorisation and supervised classification algorithms over a high-performance FastAPI backend with a responsive Bootstrap UI.</b>
 </p>
 
 ---
 
 ## Overview
 
-The **Email Spam Detection System** is an automated text classification engine built to ingest raw email datasets, perform data cleaning and tokenization, extract count-based features, and train predictive machine learning models to filter out unwanted spam messages.
+Email Spam Detection System is an advanced machine learning application designed to automatically filter and detect unwanted spam messages from legitimate email or SMS text inputs.
 
-The project features a modular backend structure located inside `src/`, containing dedicated subpackages for data processing, feature engineering, model training, evaluation, inference, quarantine management, and API routing:
+The system incorporates supervised classification models trained on text corpora with rigorous text preprocessing and feature extraction:
+- **TF-IDF Vectorisation:** Converts raw text strings into numerical feature matrices based on term frequency-inverse document frequency weighting.
+- **Supervised Classifiers:** Implements robust classification algorithms (such as Naive Bayes, Logistic Regression, or Support Vector Machines) optimized for binary text classification.
 
-* **Data Management (`src/data/`, `data/`):** Handles raw dataset ingestion (`email_spam_dataset.csv`), text preprocessing, and processed data persistence (`cleaned_emails.csv`).
-* **Feature Extraction (`src/features/`):** Transforms clean text messages into numeric feature vectors using Count Vectorization (`vectorizer.py`).
-* **Model Training & Evaluation (`src/models/`):** Orchestrates model building (`build_model.py`), training (`train.py`), performance evaluation (`evaluate.py`), and real-time prediction (`predict.py`).
-* **Quarantine & API Routing (`src/quarantine/`, `src/api/`):** Manages flagged messages (`store.py`) and serves predictions via Flask web endpoints (`app.py`).
+Instead of retraining on the fly, the application loads pre-trained model artifacts and fitted vectorisers, ensuring instantaneous response times and faithful reproduction of text cleaning, normalisation, and inference logic.
 
 ---
 
-## Repository Structure
+## Features
+
+- **Spam Classification:** Input any email or message text to determine whether it is spam or ham with associated confidence scoring.
+- **Dynamic Model Verification:** Inspect loaded model artifacts and classification performance metrics via API endpoints.
+- **Interactive REST API:** Automatic OpenAPI documentation and interactive testing via `/docs` (Swagger UI).
+- **Modern Bootstrap UI:** Clean, responsive single-page interface for seamless user interaction.
+- **Containerised Deployment:** Fully configured with Docker, Render, and Railway deployment blueprints.
+- **Robust Test Suite:** Comprehensive `pytest` coverage running with real-artifact readiness and mocked test support.
+
+---
+
+## How It Works
 
 ```text
-Project-2 Email Spam Detection/
-├── data/
-│   ├── processed/
-│   │   └── cleaned_emails.csv     # Preprocessed email text dataset
-│   ├── raw/
-│   │   └── email_spam_dataset.csv # Original raw email dataset
-│   └── sample/                    # Sample test files
-├── models/
-│   ├── count_vectorizer.pkl       # Fitted Count Vectorizer binary
-│   └── spam_model.pkl             # Trained spam classification model binary
-├── notebooks/                     # Jupyter notebooks for EDA and prototyping
-├── src/
-│   ├── api/
-│   │   └── app.py                 # Flask API server implementation
-│   ├── data/                      # Data loading & cleaning pipeline
-│   ├── features/
-│   │   └── vectorizer.py          # Count Vectorizer feature extraction module
-│   ├── models/
-│   │   ├── build_model.py         # Classifier model architecture
-│   │   ├── evaluate.py            # Evaluation metrics calculation
-│   │   ├── predict.py             # Single & batch prediction logic
-│   │   └── train.py               # Model training script
-│   ├── quarantine/
-│   │   └── store.py               # Flagged/quarantined email management
-│   └── utils/                     # Utility helper functions
-├── .gitignore                     # Git exclusion rules
-├── Email_Spam_Detection_Guide.docx # Detailed project documentation guide
-├── main.py                        # Core application execution entry point
-├── README.md                      # Project documentation
-└── requirements.txt               # Python dependencies
+                  USER INPUT
+                      │
+                      ▼
+         ┌─────────────────────────┐
+         │  Web UI / FastAPI REST  │
+         └────────────┬────────────┘
+                      │
+                      ▼
+         ┌─────────────────────────┐
+         │    Text Normalisation   │
+         │   & TF-IDF Vectoriser   │
+         └────────────┬────────────┘
+                      │
+                      ▼
+         ┌─────────────────────────┐
+         │   Trained Classifier    │
+         │   (Spam vs Ham Logic)   │
+         └────────────┬────────────┘
+                      │
+                      ▼
+         ┌─────────────────────────┐
+         │   JSON API Response     │
+         └─────────────────────────┘
 
 ```
 
 ---
 
-## System Architecture
+## Project Architecture & Layout
 
-$$\text{Raw Email} \longrightarrow \text{Data Processing (`src/data/`)} \longrightarrow \text{Count Vectorization (`src/features/`)} \longrightarrow \text{Classification Model (`src/models/`)} \longrightarrow \text{Flask API (`src/api/app.py`)}$$
+```text
+email_spam_detector/
+├── app/
+│   ├── main.py              # FastAPI application entrypoint
+│   ├── routes/              # API route handlers (/predict, /health, /models)
+│   ├── services/            # Predictor logic and text processing pipelines
+│   ├── models/              # Model loaders, vectoriser loader, and Pydantic schemas
+│   ├── utils/               # Text cleaning and normalisation utilities
+│   └── config/              # Application settings and environment variables
+├── static/                  # Frontend assets (CSS stylesheets, client-side JS)
+├── templates/               # HTML single-page interface (index.html)
+├── notebooks/               # Training scripts and artifact export utilities
+├── saved_models/            # Directory for trained model files, vectoriser, and config.json
+├── data/                    # Corpus data files (e.g., spam.csv dataset)
+├── tests/                   # Pytest automated test suite
+├── requirements.txt         # Pinned python dependencies
+├── Dockerfile               # Container build instructions
+├── Procfile                 # Railway process configuration
+├── render.yaml              # Render cloud deployment blueprint
+└── README.md                # Project documentation
 
-1. **Ingestion & Cleaning:** Raw email messages are loaded and normalized.
-2. **Feature Vectorization:** Processed text is transformed into numerical token counts using `count_vectorizer.pkl`.
-3. **Classification:** The trained model (`spam_model.pkl`) evaluates the vector to classify the email as Spam or Ham.
-4. **API Serving:** Results are delivered via the Flask backend interface and managed through quarantine storage rules.
+```
 
 ---
 
@@ -78,19 +98,16 @@ $$\text{Raw Email} \longrightarrow \text{Data Processing (`src/data/`)} \longrig
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://github.com/Abdulla-B-Official/Email-Spam-Detection-System.git](https://github.com/Abdulla-B-Official/Email-Spam-Detection-System.git)
-cd "Project-2 Email Spam Detection"
+git clone [https://github.com/Abdulla-B-Official/Email-Spam-Detection-Project.git](https://github.com/Abdulla-B-Official/Email-Spam-Detection-Project.git)
+cd Email-Spam-Detection-Project
 
 ```
 
-### 2. Set Up Virtual Environment
+### 2. Create and Activate Virtual Environment
 
 ```bash
 python -m venv .venv
-# Activate on Windows PowerShell:
-.venv\Scripts\Activate.ps1
-# Activate on Linux/macOS:
-source .venv/bin/activate
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 
 ```
 
@@ -101,15 +118,154 @@ pip install -r requirements.txt
 
 ```
 
-### 4. Run the Application
+---
+
+## Running Locally
+
+Start the development server using Uvicorn:
 
 ```bash
-python main.py
+uvicorn app.main:app --reload
 
 ```
 
-*(Or launch the API service directly via `python src/api/app.py`)*
+* **Web Interface:** [http://localhost:8000/](http://localhost:8000/)
+* **Interactive API Docs:** [http://localhost:8000/docs](http://localhost:8000/docs)
+* **Health Check:** [http://localhost:8000/health](http://localhost:8000/health)
+
+---
+
+## API Endpoints & Usage
+
+### `POST /predict`
+
+Classify an input message as spam or ham.
+
+**Request Body:**
+
+```json
+{
+  "text": "Congratulations! You have won a free lottery ticket worth $1000. Click here to claim."
+}
 
 ```
 
+**Response:**
+
+```json
+{
+  "input": "Congratulations! You have won a free lottery ticket worth $1000. Click here to claim.",
+  "prediction": "spam",
+  "confidence": 0.96
+}
+
 ```
+
+### `GET /health`
+
+Returns system status and model readiness.
+
+```json
+{
+  "status": "ok",
+  "model_loaded": true
+}
+
+```
+
+**cURL Example:**
+
+```bash
+curl -X POST http://localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"text":"Hey, are we still meeting for lunch today?"}'
+
+```
+
+---
+
+## Model Training & Artifacts
+
+To train the model from scratch using your own corpus:
+
+```bash
+python notebooks/train_model.py --data data/spam.csv --out saved_models
+
+```
+
+### Artifact Specifications
+
+* **Model Checkpoint:** Saved as `spam_classifier.pkl` (or corresponding model format).
+* **Vectoriser:** Serialised using `pickle` as `vectoriser.pkl`, preserving vocabulary features.
+* **Configuration:** `config.json` stores pipeline parameters to guarantee preprocessing parity.
+
+---
+
+## Testing
+
+Run the automated test suite using `pytest`:
+
+```bash
+pytest
+
+```
+
+The tests validate text normalisation, feature extraction, classifier prediction logic, and FastAPI endpoint validation schemas.
+
+---
+
+## Deployment
+
+### Docker Containerisation
+
+```bash
+docker build -t email-spam-detector .
+docker run -p 8000:8000 email-spam-detector
+
+```
+
+*(The container automatically detects the `$PORT` environment variable).*
+
+### Render & Railway
+
+* **Render:** Connect your GitHub repository and configure using `render.yaml`.
+* **Railway:** Deploy directly using the provided `Procfile`:
+```text
+web: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
+```
+
+
+
+---
+
+## Technology Stack
+
+| Technology | Purpose |
+| --- | --- |
+| **Python** | Core Programming Language |
+| **FastAPI** | High-Performance REST API & OpenAPI Docs |
+| **Scikit-Learn** | Machine Learning Algorithms & TF-IDF Vectorisation |
+| **Uvicorn** | ASGI Web Server |
+| **Bootstrap 5** | Responsive Frontend UI Framework |
+| **Docker** | Containerisation & Environment Isolation |
+| **Pytest** | Automated Testing Framework |
+| **Git / GitHub** | Version Control & Collaboration |
+
+---
+
+## Project Outcomes
+
+* Successfully trained and evaluated machine learning classifiers for text spam filtering.
+* Developed a robust inference pipeline with exact text preprocessing parity.
+* Built an intuitive, responsive single-page web interface.
+* Exposed clean, validated endpoints via FastAPI with automatic documentation.
+* Successfully packaged and containerised the application for cloud deployment.
+
+---
+
+### Filter Smarter. Secure Communications. Automate Spam Detection.
+
+If you found this project useful, consider giving the repository a star!
+
+---
